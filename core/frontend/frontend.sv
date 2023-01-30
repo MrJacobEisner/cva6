@@ -247,6 +247,33 @@ module frontend import ariane_pkg::*; #(
     end
     assign is_mispredict = resolved_branch_i.valid & resolved_branch_i.is_mispredict;
 
+    //PART1
+    integer f;
+    initial begin
+      f = $fopen("bp.txt","w");
+    end
+
+    always_ff @(posedge clk) begin
+
+      int num_mispredicts = 0;
+      int num_branches = 0;
+
+      if (is_mispredict) begin
+        num_mispredicts++;
+      end
+
+      if (is_branch) begin
+        num_branches++;
+      end
+
+      int hit-rate = 1 - (num_mispredicts/num_branches);
+    end
+
+    always @(posedge clk) begin
+        $fwrite(f, "%f\n", $bitstoreal(hit-rate));
+    end
+    //PART1
+
     // Cache interface
     assign icache_dreq_o.req = instr_queue_ready;
     assign if_ready = icache_dreq_i.ready & instr_queue_ready;
