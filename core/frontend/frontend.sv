@@ -248,6 +248,7 @@ module frontend import ariane_pkg::*; #(
     assign is_mispredict = resolved_branch_i.valid & resolved_branch_i.is_mispredict;
 
     //PART1
+
     integer f;
     initial begin
       f = $fopen("bp.txt","w");
